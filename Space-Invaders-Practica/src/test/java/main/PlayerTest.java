@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
     @Test
-    void testPlayerMoveWithinBounds() {
+    void testPlayerMoveRightWithinBounds() {
         var mockPanel = new JPanel();
         Player player = new Player();
         player.setX(Commons.BORDER_LEFT + 50);
@@ -21,6 +21,19 @@ class PlayerTest {
         player.act();
         player.keyReleased(keyEventRight);
         assertEquals(Commons.BORDER_LEFT + 52, player.getX());
+    }
+
+    @Test
+    void testPlayerMoveLeftWithinBounds() {
+        var mockPanel = new JPanel();
+        Player player = new Player();
+        player.setX(Commons.BORDER_RIGHT - 50);
+        KeyEvent keyEventLeft = new KeyEvent(mockPanel, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,
+                KeyEvent.VK_LEFT, KeyEvent.CHAR_UNDEFINED);
+        player.keyPressed(keyEventLeft);
+        player.act();
+        player.keyReleased(keyEventLeft);
+        assertEquals(Commons.BORDER_RIGHT - 48, player.getX());
     }
 
     @Test
