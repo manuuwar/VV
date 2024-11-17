@@ -41,7 +41,7 @@ public class Board extends JPanel {
         return this.player;
     }
 
-    public List<Alien> getAliens(){
+    public List<Alien> getAliens() {
         return this.aliens;
     }
 
@@ -52,16 +52,17 @@ public class Board extends JPanel {
     /**
      * Inicializa el tablero y comienza la partida
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     * */
+     */
     public Board() {
-
         initBoard();
         gameInit();
     }
+
     /**
-     * Inicializa un nuevo tablero con las dimensiones predefinidas, le asigna un fondo de color negro, inicializa el contador de juego e inicia la partida.
+     * Inicializa un nuevo tablero con las dimensiones predefinidas, le asigna un
+     * fondo de color negro, inicializa el contador de juego e inicia la partida.
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     * */
+     */
     private void initBoard() {
 
         addKeyListener(new TAdapter());
@@ -77,12 +78,15 @@ public class Board extends JPanel {
 
     /**
      * Incializa la partida.
-     * Crea las filas de alienígenas, creando tantos alienígenas como indica la constante Commons.NUMBER_OF_ALIENS_TO_DESTROY.
-     * Coloca los alienígenas en formación, partiendo para su coordenada X desde la posición Commons.ALIEN_INIT_X y para la coordenada Y
-     * desde Commons.ALIEN_INIT_Y. Para generar la formación en cuadrícula, va sumando 18 a cada una de las coordenadas entre un
+     * Crea las filas de alienígenas, creando tantos alienígenas como indica la
+     * constante Commons.NUMBER_OF_ALIENS_TO_DESTROY.
+     * Coloca los alienígenas en formación, partiendo para su coordenada X desde la
+     * posición Commons.ALIEN_INIT_X y para la coordenada Y
+     * desde Commons.ALIEN_INIT_Y. Para generar la formación en cuadrícula, va
+     * sumando 18 a cada una de las coordenadas entre un
      * alienígena y el siguiente.
      * También crea un jugador y el disparo con el que podrá matar a los aliens.
-     * */
+     */
     private void gameInit() {
 
         this.aliens = new ArrayList<>();
@@ -99,11 +103,13 @@ public class Board extends JPanel {
         this.player = new Player();
         this.shot = new Shot();
     }
+
     /**
      * Genera gráficamente los aliens en la interfaz en las posiciones indicadas.
-     * Si el alien es disparado, ejecuta la acción correspondiente (explota y desaparece de la pantalla)
+     * Si el alien es disparado, ejecuta la acción correspondiente (explota y
+     * desaparece de la pantalla)
      * NO ES NECESARIO PROBAR EL MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     *  */
+     */
     private void drawAliens(Graphics g) {
 
         for (Alien alien : this.aliens) {
@@ -119,11 +125,12 @@ public class Board extends JPanel {
             }
         }
     }
+
     /**
      * Genera gráficamente el jugador en la interfaz en las posiciones indicadas.
      * Si el jugador es disparado, el jugador muere y termina
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     * */
+     */
     private void drawPlayer(Graphics g) {
 
         if (this.player.isVisible()) {
@@ -137,10 +144,11 @@ public class Board extends JPanel {
             inGame = false;
         }
     }
+
     /**
      * Genera gráficamente los disparos en las posiciones indicadas
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     * */
+     */
     private void drawShot(Graphics g) {
 
         if (this.shot.isVisible()) {
@@ -148,10 +156,11 @@ public class Board extends JPanel {
             g.drawImage(this.shot.getImage(), this.shot.getX(), this.shot.getY(), this);
         }
     }
+
     /**
      * Genera gráficamente las explosiones de aliens
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     * */
+     */
     private void drawBombing(Graphics g) {
 
         for (Alien a : this.aliens) {
@@ -164,20 +173,22 @@ public class Board extends JPanel {
             }
         }
     }
+
     /**
      * Actualiza los componentes de la interfaz después de que se ejecute una acción
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     * */
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         doDrawing(g);
     }
+
     /**
      * Genera y coloca todos los elementos en la interfaz gráfica.
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     * */
+     */
     private void doDrawing(Graphics g) {
 
         g.setColor(Color.black);
@@ -205,10 +216,11 @@ public class Board extends JPanel {
 
         Toolkit.getDefaultToolkit().sync();
     }
+
     /**
      * Genera en la interfaz un mensaje indicando que se ha perdido la partida :(
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
-     * */
+     */
     private void gameOver(Graphics g) {
 
         g.setColor(Color.black);
@@ -227,12 +239,14 @@ public class Board extends JPanel {
         g.drawString(message, (Commons.BOARD_WIDTH - fontMetrics.stringWidth(message)) / 2,
                 Commons.BOARD_WIDTH / 2);
     }
+
     /**
      * Actualiza el estado del juego de acuerdo a las teclas pulsadas.
-     * Si se han destruido todos los alienígenas, es decir, el contador de muertes (deaths) es igual al número de alienígenas,
+     * Si se han destruido todos los alienígenas, es decir, el contador de muertes
+     * (deaths) es igual al número de alienígenas,
      * el juego finaliza la partida.
      * Si no se han destruido, actualiza el estado del juego.
-     * */
+     */
     private void update() {
 
         if (deaths == Commons.CHANCE) {
@@ -246,11 +260,15 @@ public class Board extends JPanel {
         update_aliens();
         update_bomb();
     }
+
     /**
      * Actualiza el estado de los disparos a los alienígenas.
-     * Comprueba la posición del alien y del disparo realizado y, si el disparo acierta al alien (es decir, las coordenadas X e Y del disparo están entre las coordenadas x+ancho del alienígena, e y+alto del alienígena),
-     * activa la animación de explosión del alienígena, lo elimina del tablero y aumenta en uno el contador de alienígenas derribados (deaths) en uno.
-     * */
+     * Comprueba la posición del alien y del disparo realizado y, si el disparo
+     * acierta al alien (es decir, las coordenadas X e Y del disparo están entre las
+     * coordenadas x+ancho del alienígena, e y+alto del alienígena),
+     * activa la animación de explosión del alienígena, lo elimina del tablero y
+     * aumenta en uno el contador de alienígenas derribados (deaths) en uno.
+     */
     private void update_shots() {
         if (this.shot.isVisible()) {
 
@@ -287,13 +305,18 @@ public class Board extends JPanel {
             }
         }
     }
+
     /**
      * Actualiza los el estado de los aliens,
-     * Mueve el alienígena hacia la izquierda o a la derecha una posición en función de la dirección indicada (direction=-1 izquierda, direction=1 derecha).
-     * Si se ha alcanzado el borde del tablero y no se puede mover el alienígena en la dirección indicada, se cambia de dirección y se mueven todos los alienígenas una posición hacia abajo (Commons.GO_DOWN).
-     * Si los alienígenas alcanzan el borde inferior del tablero, el juego termina y se nos muestra por pantalla el mensaje "Invasion!"
-     * */
-    private void update_aliens(){
+     * Mueve el alienígena hacia la izquierda o a la derecha una posición en función
+     * de la dirección indicada (direction=-1 izquierda, direction=1 derecha).
+     * Si se ha alcanzado el borde del tablero y no se puede mover el alienígena en
+     * la dirección indicada, se cambia de dirección y se mueven todos los
+     * alienígenas una posición hacia abajo (Commons.GO_DOWN).
+     * Si los alienígenas alcanzan el borde inferior del tablero, el juego termina y
+     * se nos muestra por pantalla el mensaje "Invasion!"
+     */
+    private void update_aliens() {
         for (Alien alien : this.aliens) {
 
             int x = alien.getX();
@@ -344,17 +367,22 @@ public class Board extends JPanel {
             }
         }
 
-
     }
+
     /**
      * Actualiza las bombas de los alenígenas.
-     * Genera una bomba por alienígena. Si una bomba ha sido destruida, o no ha sido creada por primera vez, la crea asignándole
-     * las coordenadas actuales del alienígena, y establece su estado "destroyed" a falso.
-     * Si la bomba ha llegado al suelo (Commons.GROUND-Commons.BOMB_HEIGHT), se destruye y desaparece (cambia destroyed a true).
-     * Si el jugador ha sido alcanzado por una bomba, el jugador cambiará su estado "setDying" a verdadero, y su imagen se cambiará por la animación de explosión
-     * Si no sucede ninguna de las condiciones anteriores, la bomba bajará verticalmente una posición.
-     * */
-    private void update_bomb(){
+     * Genera una bomba por alienígena. Si una bomba ha sido destruida, o no ha sido
+     * creada por primera vez, la crea asignándole
+     * las coordenadas actuales del alienígena, y establece su estado "destroyed" a
+     * falso.
+     * Si la bomba ha llegado al suelo (Commons.GROUND-Commons.BOMB_HEIGHT), se
+     * destruye y desaparece (cambia destroyed a true).
+     * Si el jugador ha sido alcanzado por una bomba, el jugador cambiará su estado
+     * "setDying" a verdadero, y su imagen se cambiará por la animación de explosión
+     * Si no sucede ninguna de las condiciones anteriores, la bomba bajará
+     * verticalmente una posición.
+     */
+    private void update_bomb() {
         var generator = new Random();
 
         for (Alien alien : this.aliens) {
@@ -400,15 +428,19 @@ public class Board extends JPanel {
         }
 
     }
+
     /**
      * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
-     * */
+     */
     private void doGameCycle() {
 
         update();
         repaint();
     }
-    /**FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.**/
+
+    /**
+     * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
+     **/
     private class GameCycle implements ActionListener {
 
         @Override
@@ -417,15 +449,23 @@ public class Board extends JPanel {
             doGameCycle();
         }
     }
-    /**FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.**/
+
+    /**
+     * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
+     **/
     private class TAdapter extends KeyAdapter {
-        /**FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.**/
+        /**
+         * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
+         **/
         @Override
         public void keyReleased(KeyEvent e) {
 
             player.keyReleased(e);
         }
-        /**FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.**/
+
+        /**
+         * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
+         **/
         @Override
         public void keyPressed(KeyEvent e) {
 

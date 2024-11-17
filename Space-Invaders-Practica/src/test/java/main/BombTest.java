@@ -1,6 +1,7 @@
 package main;
 
 import org.junit.jupiter.api.Test;
+import space_invaders.sprites.Alien;
 import space_invaders.sprites.Alien.Bomb;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class BombTest {
   @Test
   void testBombInitializationWithinBounds() {
-    Bomb bomb = new Bomb(Commons.BORDER_LEFT + 50, Commons.GROUND - 10);
+    Alien alien = new Alien(Commons.BORDER_LEFT + 50, Commons.GROUND - 10);
+    Bomb bomb = alien.getBomb();
     assertEquals(Commons.BORDER_LEFT + 50, bomb.getX());
     assertEquals(Commons.GROUND - 10, bomb.getY());
     assertTrue(bomb.isDestroyed());
@@ -16,14 +18,16 @@ class BombTest {
 
   @Test
   void testBombInitializationOutOfBoundsRight() {
-    Bomb bomb = new Bomb(Commons.BOARD_WIDTH + 10, Commons.GROUND);
+    Alien alien = new Alien(Commons.BOARD_WIDTH + 10, Commons.GROUND - 10);
+    Bomb bomb = alien.getBomb();
     assertEquals(Commons.BOARD_WIDTH, bomb.getX());
-    assertEquals(Commons.GROUND, bomb.getY());
+    assertEquals(Commons.GROUND - 10, bomb.getY());
   }
 
   @Test
   void testBombInitializationNegativeCoordinates() {
-    Bomb bomb = new Bomb(-10, -20);
+    Alien alien = new Alien(-10, -20);
+    Bomb bomb = alien.getBomb();
     assertEquals(Commons.BORDER_LEFT, bomb.getX());
     assertEquals(0, bomb.getY());
   }
