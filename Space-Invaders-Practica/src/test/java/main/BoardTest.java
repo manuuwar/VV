@@ -27,10 +27,11 @@ class BoardTest {
   }
 
   @Test
-  void testGameWon() {
+  void testGameWon() throws InterruptedException {
     board.setDeaths(Commons.NUMBER_OF_ALIENS_TO_DESTROY);
+    Thread.sleep(Commons.DELAY);
     assertFalse(board.isInGame());
-    assertEquals(board.getMessage(), "Game won!");
+    assertEquals("Game won!", board.getMessage());
   }
 
   @Test
@@ -40,19 +41,26 @@ class BoardTest {
   }
 
   @Test
-  void testShotDestroysAlien() {
+  void testShotDestroysAlien() throws InterruptedException {
+    board.getTimer().stop();
     var alien = board.getAliens().get(0);
-    board.setShot(new Shot(alien.getX(), alien.getY()));
-    assertEquals(board.getAliens().size(), Commons.NUMBER_OF_ALIENS_TO_DESTROY - 1);
+    var shot = new Shot(alien.getX() - 6, alien.getY() + 1);
+    board.setShot(shot);
+    board.getTimer().start();
+    Thread.sleep(Commons.DELAY);
+    assertEquals(1, board.getDeaths());
   }
 
   @Test
-  void testBombKillsPlayer() {
+  void testBombKillsPlayer() throws InterruptedException {
+    board.getTimer().stop();
     Alien alien = board.getAliens().get(0);
     var bomb = alien.getBomb();
     var player = board.getPlayer();
     bomb.setX(player.getX());
     bomb.setY(player.getY());
+    board.getTimer().start();
+    Thread.sleep(Commons.DELAY);
     assertTrue(player.isDying());
   }
 }

@@ -74,7 +74,6 @@ public class Alien extends Sprite {
      * @return bomb
      */
     public Bomb getBomb() {
-
         return bomb;
     }
 
@@ -136,7 +135,6 @@ public class Alien extends Sprite {
          * @return destroyed
          */
         public boolean isDestroyed() {
-
             return destroyed;
         }
     }
