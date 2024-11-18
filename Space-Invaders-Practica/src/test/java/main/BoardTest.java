@@ -63,4 +63,15 @@ class BoardTest {
     Thread.sleep(Commons.DELAY);
     assertTrue(player.isDying());
   }
+
+  @Test
+  void testGameLostByInvasion() throws InterruptedException {
+    board.getTimer().stop();
+    var alien = board.getAliens().get(0);
+    alien.setY(Commons.GROUND);
+    board.getTimer().start();
+    Thread.sleep(Commons.DELAY);
+    assertFalse(board.isInGame());
+    assertEquals("Invasion!", board.getMessage());
+  }
 }
