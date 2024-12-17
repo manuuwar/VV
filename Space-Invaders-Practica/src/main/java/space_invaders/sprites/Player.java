@@ -7,15 +7,18 @@ import java.awt.event.KeyEvent;
 
 public class Player extends Sprite {
 
-    private int width;
+    // FIXME: Public for testing, should be private.
+    public int width;
 
     public Player() {
 
         initPlayer();
     }
+
     /**
-     * Crea un nuevo jugador, le asigna su imagen en la interfaz y lo ubica en el centro de la pantalla
-     * */
+     * Crea un nuevo jugador, le asigna su imagen en la interfaz y lo ubica en el
+     * centro de la pantalla
+     */
     private void initPlayer() {
 
         var playerImg = "src/main/resources/images/player.png";
@@ -33,51 +36,56 @@ public class Player extends Sprite {
 
     /**
      * Mueve la posición del jugador a la izquierda o a la derecha.
-     * Si el jugador ha alcanzado el borde de la pantalla y se intenta mover fuera de la pantalla,
+     * Si el jugador ha alcanzado el borde de la pantalla y se intenta mover fuera
+     * de la pantalla,
      * lo mantendrá quieto en el borde.
-     * */
+     */
     public void act() {
 
         x += dx;
 
-        if (x >= 2) {
-
-            x = 2;
+        if (x <= Commons.BORDER_LEFT) {
+            x = Commons.BORDER_LEFT;
         }
 
-        if (x >= Commons.BOARD_WIDTH - 2 * width) {
-
-            x = Commons.BOARD_WIDTH - 2 * width;
+        if (x >= Commons.BOARD_WIDTH - width) {
+            x = Commons.BOARD_WIDTH - width;
         }
     }
+
     /**
      * Comprueba qué tecla está pulsada y:
-     * - Si se pulsa la tecla flecha a la izquierda, guarda el movimiento hacia la izquierda
-     * - Si se pulsa la tecla flecha a la derecha, guarda el movimiento hacia la derecha
+     * - Si se pulsa la tecla flecha a la izquierda, guarda el movimiento hacia la
+     * izquierda
+     * - Si se pulsa la tecla flecha a la derecha, guarda el movimiento hacia la
+     * derecha
      * Cualquier otra tecla de movimiento no produce acción
+     * 
      * @param e tecla presionada
-     * */
+     */
     public void keyPressed(KeyEvent e) {
 
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_LEFT) {
-
-            dx = 2;
+            dx = -2;
         }
 
         if (key == KeyEvent.VK_RIGHT) {
-
             dx = 2;
         }
     }
+
     /**
      * Comprueba si la tecla e ya no está pulsada:
-     * - Si se suelta la tecla flecha a la izquierda, reinicia el desplazamiento de la izquierda a 0
-     * - Si se pulsa la tecla flecha a la derecha, reinicia el desplazamiento de la derecha a 0
+     * - Si se suelta la tecla flecha a la izquierda, reinicia el desplazamiento de
+     * la izquierda a 0
+     * - Si se pulsa la tecla flecha a la derecha, reinicia el desplazamiento de la
+     * derecha a 0
      * Cualquier otra tecla de movimiento no produce acción
+     * 
      * @param e tecla presionada
-     * */
+     */
     public void keyReleased(KeyEvent e) {
 
         int key = e.getKeyCode();

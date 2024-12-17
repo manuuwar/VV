@@ -28,7 +28,7 @@ class BombTest {
   void testBombInitializationNegativeCoordinates() {
     Alien alien = new Alien(-10, -20);
     Bomb bomb = alien.getBomb();
-    assertEquals(Commons.BORDER_LEFT, bomb.getX());
+    assertEquals(0, bomb.getX());
     assertEquals(0, bomb.getY());
   }
 }

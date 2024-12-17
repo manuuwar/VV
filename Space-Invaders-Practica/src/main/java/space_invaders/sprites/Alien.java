@@ -32,24 +32,23 @@ public class Alien extends Sprite {
      *          Si se introduce alguna coordenada negativa, se reemplazará por 0.
      */
     private void initAlien(int x, int y) {
-
         if (x > Commons.BOARD_WIDTH) {
             this.x = Commons.BOARD_WIDTH;
-        }
-        if (x < 0) {
+        } else if (x < 0) {
             this.x = 0;
-        }
-        if (y > Commons.BOARD_HEIGHT) {
-            this.y = Commons.BOARD_HEIGHT;
-        }
-        if (y < 0) {
-            this.y = 0;
         } else {
             this.x = x;
+        }
+
+        if (y > Commons.BOARD_HEIGHT) {
+            this.y = Commons.BOARD_HEIGHT;
+        } else if (y < 0) {
+            this.y = 0;
+        } else {
             this.y = y;
         }
 
-        bomb = new Bomb(x, y);
+        bomb = new Bomb(this.x, this.y);
 
         var alienImg = "src/main/resources/images/alien.png";
         var ii = new ImageIcon(alienImg);
@@ -64,8 +63,7 @@ public class Alien extends Sprite {
      *                  el alien
      */
     public void act(int direction) {
-
-        this.x = direction + Commons.ALIEN_WIDTH;
+        this.x = this.x + direction * Commons.ALIEN_WIDTH;
     }
 
     /**

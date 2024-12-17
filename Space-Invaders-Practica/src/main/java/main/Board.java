@@ -64,7 +64,6 @@ public class Board extends JPanel {
      * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
     private void initBoard() {
-
         addKeyListener(new TAdapter());
         setFocusable(true);
         d = new Dimension(Commons.BOARD_WIDTH, Commons.BOARD_HEIGHT);
@@ -93,9 +92,7 @@ public class Board extends JPanel {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-
-                var alien = new Alien(Commons.ALIEN_INIT_Y + 18 * j,
-                        Commons.ALIEN_INIT_Y + 18 * i);
+                var alien = new Alien(Commons.ALIEN_INIT_Y + 18 * j, Commons.ALIEN_INIT_Y + 18 * i);
                 this.aliens.add(alien);
             }
         }
@@ -113,14 +110,11 @@ public class Board extends JPanel {
     private void drawAliens(Graphics g) {
 
         for (Alien alien : this.aliens) {
-
             if (alien.isVisible()) {
-
                 g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
             }
 
             if (alien.isDying()) {
-
                 alien.setDying(false);
             }
         }
@@ -247,12 +241,14 @@ public class Board extends JPanel {
      * el juego finaliza la partida.
      * Si no se han destruido, actualiza el estado del juego.
      */
-    private void update() {
+    // FIXME: Public for testing, should be private.
+    public void update() {
 
-        if (deaths == Commons.CHANCE) {
+        if (deaths == Commons.NUMBER_OF_ALIENS_TO_DESTROY) {
             inGame = false;
             timer.stop();
             message = "Game won!";
+            return;
         }
 
         this.player.act();
@@ -269,7 +265,8 @@ public class Board extends JPanel {
      * activa la animación de explosión del alienígena, lo elimina del tablero y
      * aumenta en uno el contador de alienígenas derribados (deaths) en uno.
      */
-    private void update_shots() {
+    // FIXME: Public for testing, should be private.
+    public void update_shots() {
         if (this.shot.isVisible()) {
 
             int shotX = this.shot.getX();
@@ -289,7 +286,7 @@ public class Board extends JPanel {
                         var ii = new ImageIcon(explImg);
                         alien.setImage(ii.getImage());
                         alien.setDying(true);
-                        deaths--;
+                        deaths++;
                         this.shot.die();
                     }
                 }
@@ -316,22 +313,23 @@ public class Board extends JPanel {
      * Si los alienígenas alcanzan el borde inferior del tablero, el juego termina y
      * se nos muestra por pantalla el mensaje "Invasion!"
      */
-    private void update_aliens() {
+    // FIXME: Public for testing, should be private.
+    public void update_aliens() {
         for (Alien alien : this.aliens) {
 
             int x = alien.getX();
 
-            if (x <= Commons.BOARD_WIDTH - Commons.BORDER_RIGHT && direction != -1) {
+            if (x >= Commons.BOARD_WIDTH - Commons.BORDER_RIGHT && direction != -1) {
 
                 direction = 0;
 
                 Iterator<Alien> i1 = this.aliens.iterator();
 
                 while (i1.hasNext()) {
-
                     Alien a2 = i1.next();
                     a2.setY(a2.getY() + Commons.GO_DOWN);
                 }
+                break;
             }
 
             if (x <= Commons.BORDER_LEFT && direction != 1) {
@@ -341,10 +339,10 @@ public class Board extends JPanel {
                 Iterator<Alien> i2 = this.aliens.iterator();
 
                 while (i2.hasNext()) {
-
                     Alien a = i2.next();
-                    a.setX(a.getY() + Commons.GO_DOWN);
+                    a.setY(a.getY() + Commons.GO_DOWN);
                 }
+                break;
             }
         }
 
@@ -366,7 +364,6 @@ public class Board extends JPanel {
                 alien.act(direction);
             }
         }
-
     }
 
     /**
@@ -382,16 +379,16 @@ public class Board extends JPanel {
      * Si no sucede ninguna de las condiciones anteriores, la bomba bajará
      * verticalmente una posición.
      */
-    private void update_bomb() {
+    // FIXME: Public for testing, should be private.
+    public void update_bomb() {
         var generator = new Random();
 
         for (Alien alien : this.aliens) {
 
-            int shot = generator.nextInt(15);
+            int shot = generator.nextInt(100);
             Alien.Bomb bomb = alien.getBomb();
 
-            if (shot == Commons.CHANCE && alien.isVisible() && bomb.isDestroyed()) {
-
+            if (shot <= Commons.CHANCE && alien.isVisible() && bomb.isDestroyed()) {
                 bomb.setDestroyed(false);
                 bomb.setX(alien.getX());
                 bomb.setY(alien.getY());
@@ -411,7 +408,7 @@ public class Board extends JPanel {
 
                     var ii = new ImageIcon(explImg);
                     this.player.setImage(ii.getImage());
-                    this.player.setDying(false);
+                    this.player.setDying(true);
                     bomb.setDestroyed(true);
                 }
             }
@@ -421,19 +418,16 @@ public class Board extends JPanel {
                 bomb.setY(bomb.getY() + 1);
 
                 if (bomb.getY() >= Commons.GROUND - Commons.BOMB_HEIGHT) {
-
-                    bomb.setDestroyed(false);
+                    bomb.setDestroyed(true);
                 }
             }
         }
-
     }
 
     /**
      * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
      */
     private void doGameCycle() {
-
         update();
         repaint();
     }
@@ -445,7 +439,6 @@ public class Board extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
             doGameCycle();
         }
     }

@@ -14,6 +14,7 @@ class BoardTest {
   @BeforeEach
   void setUp() {
     board = new Board();
+    board.getTimer().stop();
   }
 
   /***********************
@@ -31,9 +32,9 @@ class BoardTest {
   }
 
   @Test
-  void testGameWon() throws InterruptedException {
+  void testGameWon() {
     board.setDeaths(Commons.NUMBER_OF_ALIENS_TO_DESTROY);
-    Thread.sleep(Commons.DELAY);
+    board.update();
     assertFalse(board.isInGame());
     assertEquals("Game won!", board.getMessage());
   }
@@ -41,42 +42,60 @@ class BoardTest {
   @Test
   void testGameContinues() {
     board.setDeaths(0);
+    board.update();
     assertTrue(board.isInGame());
   }
 
   @Test
-  void testShotDestroysAlien() throws InterruptedException {
-    board.getTimer().stop();
+  void testShotDestroysAlien() {
     var alien = board.getAliens().get(0);
     var shot = new Shot(alien.getX() - 6, alien.getY() + 1);
     board.setShot(shot);
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
+    board.update_shots();
     assertEquals(1, board.getDeaths());
   }
 
   @Test
-  void testBombKillsPlayer() throws InterruptedException {
-    board.getTimer().stop();
+  void testBombKillsPlayer() {
     Alien alien = board.getAliens().get(0);
     var bomb = alien.getBomb();
     var player = board.getPlayer();
     bomb.setX(player.getX());
     bomb.setY(player.getY());
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
+    bomb.setDestroyed(false);
+    board.update_bomb();
     assertTrue(player.isDying());
   }
 
   @Test
-  void testGameLostByInvasion() throws InterruptedException {
-    board.getTimer().stop();
+  void testGameLostByInvasion() {
     var alien = board.getAliens().get(0);
     alien.setY(Commons.GROUND);
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
+    board.update_aliens();
     assertFalse(board.isInGame());
     assertEquals("Invasion!", board.getMessage());
+  }
+
+  @Test
+  void testUpdateAliensMoveDownAtLeftBoundary() {
+    Alien alien = board.getAliens().get(0);
+    alien.setX(Commons.BORDER_LEFT);
+    alien.setY(50);
+    board.setDirection(-1); // Moving left
+    board.update_aliens();
+    assertEquals(50 + Commons.GO_DOWN, alien.getY());
+    assertEquals(1, board.getDirection());
+  }
+
+  @Test
+  void testUpdateAliensMoveDownAtRightBoundary() {
+    Alien alien = board.getAliens().get(0);
+    alien.setX(Commons.BOARD_WIDTH - Commons.BORDER_RIGHT); // At right boundary
+    alien.setY(50);
+    board.setDirection(1); // Moving right
+    board.update_aliens();
+    assertEquals(50 + Commons.GO_DOWN, alien.getY()); // Alien moves downward
+    assertEquals(0, board.getDirection()); // Direction reset
   }
 
   /***********************
@@ -84,53 +103,44 @@ class BoardTest {
    ***********************/
 
   @Test
-  void testUpdateWhenConditionsMet() throws InterruptedException {
-    board.getTimer().stop();
-    board.setDeaths(Commons.CHANCE);
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
+  void testUpdateWhenConditionsMet() {
+    board.setDeaths(Commons.NUMBER_OF_ALIENS_TO_DESTROY);
+    board.update();
     assertFalse(board.isInGame());
-    assertEquals("Game Won!", board.getMessage());
+    assertEquals("Game won!", board.getMessage());
   }
 
   @Test
-  void testUpdateWhenConditionsNotMet() throws InterruptedException {
-    board.getTimer().stop();
-    board.setDeaths(Commons.CHANCE - 1);
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
+  void testUpdateWhenConditionsNotMet() {
+    board.setDeaths(Commons.NUMBER_OF_ALIENS_TO_DESTROY - 1);
+    board.update();
     assertTrue(board.isInGame());
-    assertNotEquals("Game Won!", board.getMessage());
+    assertNotEquals("Game won!", board.getMessage());
   }
 
   @Test
-  void testUpdateShotsShotNotVisible() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateShotsShotNotVisible() {
     Shot shot = new Shot();
     shot.die(); // Shot is not visible
     board.setShot(shot);
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
+    board.update_shots();
     assertFalse(shot.isVisible());
   }
 
   @Test
-  void testUpdateShotsVisibleAlienVisibleHit() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateShotsVisibleAlienVisibleHit() {
     Alien alien = board.getAliens().get(0);
     Shot shot = new Shot();
     shot.setX(alien.getX());
     shot.setY(alien.getY());
     board.setShot(shot);
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
+    board.update_shots();
     assertTrue(alien.isDying());
     assertFalse(shot.isVisible());
   }
 
   @Test
-  void testUpdateShotsVisibleAlienVisibleMiss() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateShotsVisibleAlienVisibleMiss() {
     Alien alien = board.getAliens().get(0);
     Player player = board.getPlayer();
     Shot shot = new Shot();
@@ -138,107 +148,65 @@ class BoardTest {
     alien.setY(Commons.BOARD_HEIGHT);
     shot.setX(player.getX());
     shot.setY(player.getY());
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
+    board.update_shots();
     assertTrue(shot.isVisible());
     assertFalse(alien.isDying());
   }
 
   @Test
-  void testUpdateAliensMoveDownAtRightBoundary() throws InterruptedException {
-    board.getTimer().stop();
-    Alien alien = board.getAliens().get(0);
-    alien.setX(Commons.BOARD_WIDTH - Commons.BORDER_RIGHT); // At right boundary
-    alien.setY(50);
-    board.setDirection(1); // Moving right
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
-    assertEquals(50 + Commons.GO_DOWN, alien.getY()); // Alien moves downward
-    assertEquals(0, board.getDirection()); // Direction reset
-  }
-
-  @Test
-  void testUpdateAliensMoveDownAtLeftBoundary() throws InterruptedException {
-    board.getTimer().stop();
-    Alien alien = board.getAliens().get(0);
-    alien.setX(Commons.BORDER_LEFT);
-    alien.setY(50);
-    board.setDirection(-1); // Moving left
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
-    assertEquals(50 + Commons.GO_DOWN, alien.getY());
-    assertEquals(1, board.getDirection());
-  }
-
-  @Test
-  void testUpdateAliensGameOver() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateAliensGameOver() {
     Alien alien = board.getAliens().get(0);
     alien.setX(100);
     alien.setY(Commons.GROUND - Commons.ALIEN_HEIGHT);
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
+    board.update_aliens();
     assertFalse(board.isInGame()); // Game ends
     assertEquals("Invasion!", board.getMessage());
   }
 
   @Test
-  void testUpdateAliensMoveRight() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateAliensMoveRight() {
     Alien alien = board.getAliens().get(0);
     alien.setX(50); // Well within the board
     alien.setY(50);
     board.setDirection(1); // Moving right
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
-    assertEquals(52, alien.getX()); // Alien moves right
+    board.update_aliens();
+    assertEquals(50 + Commons.ALIEN_WIDTH, alien.getX()); // Alien moves right
     assertEquals(1, board.getDirection()); // Direction remains unchanged
     assertTrue(board.isInGame()); // Game is still ongoing
   }
 
   @Test
-  void testUpdateAliensMoveLeft() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateAliensMoveLeft() {
     Alien alien = board.getAliens().get(0);
-    alien.setX(Commons.BORDER_LEFT + 2);
+    // We remove all aliens but the first, to avoid having to place them all
+    // manually in the board.
+    board.getAliens().clear();
+    board.getAliens().add(alien);
+    alien.setX(Commons.BORDER_LEFT + Commons.ALIEN_WIDTH);
     alien.setY(50);
     board.setDirection(-1); // Moving left
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
+    board.update_aliens();
     assertEquals(Commons.BORDER_LEFT, alien.getX());
     assertEquals(-1, board.getDirection());
     assertTrue(board.isInGame());
   }
 
+  // Because this method is based on chance it is necessary to change the nextInt
+  // bound to be Commons.CHANCE to verify it.
   @Test
-  void testUpdateBombCreatedForVisibleAlien() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateBombCreatedForVisibleAlien() {
     Alien alien = board.getAliens().get(0);
     Alien.Bomb bomb = alien.getBomb();
     bomb.setDestroyed(true);
     board.setPlayer(new Player());
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
+    board.update_bomb();
     assertFalse(bomb.isDestroyed());
     assertEquals(alien.getX(), bomb.getX());
-    assertEquals(alien.getY(), bomb.getY());
+    assertEquals(alien.getY() + 1, bomb.getY()); // Bomb goes down by 1.
   }
 
   @Test
-  void testUpdateBombHitsPlayer() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateBombHitsPlayer() {
     Alien alien = board.getAliens().get(0);
     Alien.Bomb bomb = alien.getBomb();
     bomb.setDestroyed(false);
@@ -247,54 +215,39 @@ class BoardTest {
     player.setY(50);
     bomb.setX(50);
     bomb.setY(50);
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
+    board.update_bomb();
     assertTrue(player.isDying());
     assertTrue(bomb.isDestroyed());
   }
 
   @Test
-  void testUpdateBombReachesGround() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateBombReachesGround() {
     Alien alien = board.getAliens().get(0);
     Alien.Bomb bomb = alien.getBomb();
     bomb.setDestroyed(false);
     bomb.setY(Commons.GROUND - Commons.BOMB_HEIGHT);
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
+    board.update_bomb();
     assertTrue(bomb.isDestroyed());
   }
 
   @Test
-  void testUpdateBombContinuesFalling() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateBombContinuesFalling() {
     Alien alien = board.getAliens().get(0);
     Alien.Bomb bomb = alien.getBomb();
     bomb.setDestroyed(false); // Bomb is active
     bomb.setY(50); // Bomb is mid-air
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
+    board.update_bomb();
     assertEquals(51, bomb.getY()); // Bomb moves one step downward
     assertFalse(bomb.isDestroyed()); // Bomb is still active
   }
 
   @Test
-  void testUpdateBombNotCreatedForInvisibleAlien() throws InterruptedException {
-    board.getTimer().stop();
+  void testUpdateBombNotCreatedForInvisibleAlien() {
     Alien alien = board.getAliens().get(0);
     alien.die();
     Alien.Bomb bomb = alien.getBomb();
     bomb.setDestroyed(true); // Bomb not created initially
-
-    board.getTimer().start();
-    Thread.sleep(Commons.DELAY);
-
+    board.update_bomb();
     assertTrue(bomb.isDestroyed()); // Bomb remains destroyed
   }
 }

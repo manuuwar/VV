@@ -10,7 +10,8 @@ public class Sprite {
 
     int x;
     int y;
-    int dx;
+    // FIXME: Public for testing, remove later.
+    public int dx;
 
     public Sprite() {
         visible = true;
