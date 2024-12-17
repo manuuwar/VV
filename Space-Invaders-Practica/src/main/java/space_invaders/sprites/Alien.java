@@ -63,7 +63,7 @@ public class Alien extends Sprite {
      *                  el alien
      */
     public void act(int direction) {
-        this.x = this.x + direction * Commons.ALIEN_WIDTH;
+        this.x = this.x + direction;
     }
 
     /**

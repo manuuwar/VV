@@ -33,7 +33,7 @@ class AlienTest {
     Alien alien = new Alien(50, 50);
     int direction = -1; // Left.
     alien.act(direction);
-    assertEquals(50 + Commons.ALIEN_WIDTH * direction, alien.getX());
+    assertEquals(50 + direction, alien.getX());
   }
 
   @Test
@@ -41,7 +41,7 @@ class AlienTest {
     Alien alien = new Alien(50, 50);
     int direction = 1; // Right.
     alien.act(direction);
-    assertEquals(50 + Commons.ALIEN_WIDTH * direction, alien.getX());
+    assertEquals(50 + direction, alien.getX());
   }
 
   @Test
@@ -49,6 +49,6 @@ class AlienTest {
     Alien alien = new Alien(50, 50);
     int direction = 0; // Down.
     alien.act(direction);
-    assertEquals(50 + Commons.ALIEN_WIDTH * direction, alien.getX());
+    assertEquals(50 + direction, alien.getX());
   }
 }

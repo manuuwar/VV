@@ -95,7 +95,7 @@ class BoardTest {
     board.setDirection(1); // Moving right
     board.update_aliens();
     assertEquals(50 + Commons.GO_DOWN, alien.getY()); // Alien moves downward
-    assertEquals(0, board.getDirection()); // Direction reset
+    assertEquals(-1, board.getDirection());
   }
 
   /***********************
