@@ -1,12 +1,5 @@
 package main;
 
-import space_invaders.sprites.Alien;
-import space_invaders.sprites.Player;
-import space_invaders.sprites.Shot;
-
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -20,6 +13,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import space_invaders.sprites.Alien;
+import space_invaders.sprites.Player;
+import space_invaders.sprites.Shot;
 
 public class Board extends JPanel {
 
@@ -50,8 +51,8 @@ public class Board extends JPanel {
     }
 
     /**
-     * Inicializa el tablero y comienza la partida
-     * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Inicializa el tablero y comienza la partida NO ES NECESARIO PROBAR ESTE
+     * MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
     public Board() {
         initBoard();
@@ -59,9 +60,9 @@ public class Board extends JPanel {
     }
 
     /**
-     * Inicializa un nuevo tablero con las dimensiones predefinidas, le asigna un
-     * fondo de color negro, inicializa el contador de juego e inicia la partida.
-     * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Inicializa un nuevo tablero con las dimensiones predefinidas, le asigna
+     * un fondo de color negro, inicializa el contador de juego e inicia la
+     * partida. NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
     private void initBoard() {
         addKeyListener(new TAdapter());
@@ -76,14 +77,12 @@ public class Board extends JPanel {
     }
 
     /**
-     * Incializa la partida.
-     * Crea las filas de alienígenas, creando tantos alienígenas como indica la
-     * constante Commons.NUMBER_OF_ALIENS_TO_DESTROY.
-     * Coloca los alienígenas en formación, partiendo para su coordenada X desde la
-     * posición Commons.ALIEN_INIT_X y para la coordenada Y
-     * desde Commons.ALIEN_INIT_Y. Para generar la formación en cuadrícula, va
-     * sumando 18 a cada una de las coordenadas entre un
-     * alienígena y el siguiente.
+     * Incializa la partida. Crea las filas de alienígenas, creando tantos
+     * alienígenas como indica la constante Commons.NUMBER_OF_ALIENS_TO_DESTROY.
+     * Coloca los alienígenas en formación, partiendo para su coordenada X desde
+     * la posición Commons.ALIEN_INIT_X y para la coordenada Y desde
+     * Commons.ALIEN_INIT_Y. Para generar la formación en cuadrícula, va sumando
+     * 18 a cada una de las coordenadas entre un alienígena y el siguiente.
      * También crea un jugador y el disparo con el que podrá matar a los aliens.
      */
     private void gameInit() {
@@ -102,10 +101,10 @@ public class Board extends JPanel {
     }
 
     /**
-     * Genera gráficamente los aliens en la interfaz en las posiciones indicadas.
-     * Si el alien es disparado, ejecuta la acción correspondiente (explota y
-     * desaparece de la pantalla)
-     * NO ES NECESARIO PROBAR EL MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Genera gráficamente los aliens en la interfaz en las posiciones
+     * indicadas. Si el alien es disparado, ejecuta la acción correspondiente
+     * (explota y desaparece de la pantalla) NO ES NECESARIO PROBAR EL MÉTODO
+     * MEDIANTE PRUEBAS UNITARIAS
      */
     private void drawAliens(Graphics g) {
 
@@ -121,27 +120,22 @@ public class Board extends JPanel {
     }
 
     /**
-     * Genera gráficamente el jugador en la interfaz en las posiciones indicadas.
-     * Si el jugador es disparado, el jugador muere y termina
-     * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Genera gráficamente el jugador en la interfaz en las posiciones
+     * indicadas. Si el jugador es disparado, el jugador muere y termina NO ES
+     * NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
-    private void drawPlayer(Graphics g) {
+    // FIXME: Public for testing, should be private.
+    public void drawPlayer(Graphics g) {
 
         if (this.player.isVisible()) {
 
             g.drawImage(this.player.getImage(), this.player.getX(), this.player.getY(), this);
         }
-
-        if (this.player.isDying()) {
-
-            this.player.die();
-            inGame = false;
-        }
     }
 
     /**
-     * Genera gráficamente los disparos en las posiciones indicadas
-     * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Genera gráficamente los disparos en las posiciones indicadas NO ES
+     * NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
     private void drawShot(Graphics g) {
 
@@ -152,8 +146,8 @@ public class Board extends JPanel {
     }
 
     /**
-     * Genera gráficamente las explosiones de aliens
-     * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Genera gráficamente las explosiones de aliens NO ES NECESARIO PROBAR ESTE
+     * MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
     private void drawBombing(Graphics g) {
 
@@ -169,8 +163,8 @@ public class Board extends JPanel {
     }
 
     /**
-     * Actualiza los componentes de la interfaz después de que se ejecute una acción
-     * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Actualiza los componentes de la interfaz después de que se ejecute una
+     * acción NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
     @Override
     public void paintComponent(Graphics g) {
@@ -180,8 +174,8 @@ public class Board extends JPanel {
     }
 
     /**
-     * Genera y coloca todos los elementos en la interfaz gráfica.
-     * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Genera y coloca todos los elementos en la interfaz gráfica. NO ES
+     * NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
     private void doDrawing(Graphics g) {
 
@@ -212,8 +206,8 @@ public class Board extends JPanel {
     }
 
     /**
-     * Genera en la interfaz un mensaje indicando que se ha perdido la partida :(
-     * NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
+     * Genera en la interfaz un mensaje indicando que se ha perdido la partida
+     * :( NO ES NECESARIO PROBAR ESTE MÉTODO MEDIANTE PRUEBAS UNITARIAS
      */
     private void gameOver(Graphics g) {
 
@@ -235,10 +229,9 @@ public class Board extends JPanel {
     }
 
     /**
-     * Actualiza el estado del juego de acuerdo a las teclas pulsadas.
-     * Si se han destruido todos los alienígenas, es decir, el contador de muertes
-     * (deaths) es igual al número de alienígenas,
-     * el juego finaliza la partida.
+     * Actualiza el estado del juego de acuerdo a las teclas pulsadas. Si se han
+     * destruido todos los alienígenas, es decir, el contador de muertes
+     * (deaths) es igual al número de alienígenas, el juego finaliza la partida.
      * Si no se han destruido, actualiza el estado del juego.
      */
     // FIXME: Public for testing, should be private.
@@ -251,6 +244,11 @@ public class Board extends JPanel {
             return;
         }
 
+        if (this.player.isDying()) {
+            this.player.die();
+            inGame = false;
+        }
+
         this.player.act();
         update_shots();
         update_aliens();
@@ -258,12 +256,12 @@ public class Board extends JPanel {
     }
 
     /**
-     * Actualiza el estado de los disparos a los alienígenas.
-     * Comprueba la posición del alien y del disparo realizado y, si el disparo
-     * acierta al alien (es decir, las coordenadas X e Y del disparo están entre las
-     * coordenadas x+ancho del alienígena, e y+alto del alienígena),
-     * activa la animación de explosión del alienígena, lo elimina del tablero y
-     * aumenta en uno el contador de alienígenas derribados (deaths) en uno.
+     * Actualiza el estado de los disparos a los alienígenas. Comprueba la
+     * posición del alien y del disparo realizado y, si el disparo acierta al
+     * alien (es decir, las coordenadas X e Y del disparo están entre las
+     * coordenadas x+ancho del alienígena, e y+alto del alienígena), activa la
+     * animación de explosión del alienígena, lo elimina del tablero y aumenta
+     * en uno el contador de alienígenas derribados (deaths) en uno.
      */
     // FIXME: Public for testing, should be private.
     public void update_shots() {
@@ -304,14 +302,14 @@ public class Board extends JPanel {
     }
 
     /**
-     * Actualiza los el estado de los aliens,
-     * Mueve el alienígena hacia la izquierda o a la derecha una posición en función
-     * de la dirección indicada (direction=-1 izquierda, direction=1 derecha).
-     * Si se ha alcanzado el borde del tablero y no se puede mover el alienígena en
-     * la dirección indicada, se cambia de dirección y se mueven todos los
-     * alienígenas una posición hacia abajo (Commons.GO_DOWN).
-     * Si los alienígenas alcanzan el borde inferior del tablero, el juego termina y
-     * se nos muestra por pantalla el mensaje "Invasion!"
+     * Actualiza los el estado de los aliens, Mueve el alienígena hacia la
+     * izquierda o a la derecha una posición en función de la dirección indicada
+     * (direction=-1 izquierda, direction=1 derecha). Si se ha alcanzado el
+     * borde del tablero y no se puede mover el alienígena en la dirección
+     * indicada, se cambia de dirección y se mueven todos los alienígenas una
+     * posición hacia abajo (Commons.GO_DOWN). Si los alienígenas alcanzan el
+     * borde inferior del tablero, el juego termina y se nos muestra por
+     * pantalla el mensaje "Invasion!"
      */
     // FIXME: Public for testing, should be private.
     public void update_aliens() {
@@ -367,17 +365,15 @@ public class Board extends JPanel {
     }
 
     /**
-     * Actualiza las bombas de los alenígenas.
-     * Genera una bomba por alienígena. Si una bomba ha sido destruida, o no ha sido
-     * creada por primera vez, la crea asignándole
-     * las coordenadas actuales del alienígena, y establece su estado "destroyed" a
-     * falso.
-     * Si la bomba ha llegado al suelo (Commons.GROUND-Commons.BOMB_HEIGHT), se
-     * destruye y desaparece (cambia destroyed a true).
-     * Si el jugador ha sido alcanzado por una bomba, el jugador cambiará su estado
-     * "setDying" a verdadero, y su imagen se cambiará por la animación de explosión
-     * Si no sucede ninguna de las condiciones anteriores, la bomba bajará
-     * verticalmente una posición.
+     * Actualiza las bombas de los alenígenas. Genera una bomba por alienígena.
+     * Si una bomba ha sido destruida, o no ha sido creada por primera vez, la
+     * crea asignándole las coordenadas actuales del alienígena, y establece su
+     * estado "destroyed" a falso. Si la bomba ha llegado al suelo
+     * (Commons.GROUND-Commons.BOMB_HEIGHT), se destruye y desaparece (cambia
+     * destroyed a true). Si el jugador ha sido alcanzado por una bomba, el
+     * jugador cambiará su estado "setDying" a verdadero, y su imagen se
+     * cambiará por la animación de explosión Si no sucede ninguna de las
+     * condiciones anteriores, la bomba bajará verticalmente una posición.
      */
     // FIXME: Public for testing, should be private.
     public void update_bomb() {
@@ -434,7 +430,8 @@ public class Board extends JPanel {
 
     /**
      * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
-     **/
+     *
+     */
     private class GameCycle implements ActionListener {
 
         @Override
@@ -445,11 +442,15 @@ public class Board extends JPanel {
 
     /**
      * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
-     **/
+     *
+     */
     private class TAdapter extends KeyAdapter {
+
         /**
-         * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
-         **/
+         * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO
+         * PROBARLA.
+         *
+         */
         @Override
         public void keyReleased(KeyEvent e) {
 
@@ -457,8 +458,10 @@ public class Board extends JPanel {
         }
 
         /**
-         * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO PROBARLA.
-         **/
+         * FUNCIÓN RELACIONADA CON LA GESTIÓN DE INTERFAZ. NO ES NECESARIO
+         * PROBARLA.
+         *
+         */
         @Override
         public void keyPressed(KeyEvent e) {
 

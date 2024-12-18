@@ -1,15 +1,17 @@
 package main;
 
-import org.junit.jupiter.api.Test;
-import space_invaders.sprites.Player;
-
 import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
-class PlayerTest {
+import space_invaders.sprites.Player;
+
+class PlayerTests {
+
     @Test
     void testPlayerKeyPressedLeft() {
         var mockPanel = new JPanel();
